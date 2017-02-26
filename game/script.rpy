@@ -1,5 +1,7 @@
 ﻿
-# Characters - Special
+#################################################
+
+####################### Characters - Special
 define narrator = Character(None, kind=nvl)
 define c_cent = Character(None,
                             what_xalign=0.5,
@@ -11,42 +13,60 @@ define c_cent = Character(None,
                             window_yalign=0.5)
 define c_temp = Character('*TEMP*', color="#c8ffc8", kind=nvl)
 
-# Characters - Player group
-define prot_name = 'Me'
-define mira_name = 'Mira'
-define kasp_name = 'Kasper'
-define zoee_name = 'Zoë'
-define faye_name = 'Faye'
-define jian_name = 'Jianyu'
+####################### Characters - Player group
+# Characters - Protagonist
+define c_prot_name = 'Me'
+define c_prot = DynamicCharacter('c_prot_name', color="#c8ffc8", kind=nvl)
+define c_prot_gender = 'f'
 
-define c_prot = DynamicCharacter('prot_name', color="#c8ffc8", kind=nvl)
-define c_mira = DynamicCharacter('mira_name', color="#c8ffc8", kind=nvl)
-define c_kasp = DynamicCharacter('kasp_name', color="#c8ffc8", kind=nvl)
-define c_zoee = DynamicCharacter('zoee_name', color="#c8ffc8", kind=nvl)
-define c_faye = DynamicCharacter('faye_name', color="#c8ffc8", kind=nvl)
-define c_jian = DynamicCharacter('jian_name', color="#c8ffc8", kind=nvl)
+# Characters - Mira
+define c_mira_name = 'Mira'
+define c_mira = DynamicCharacter('c_mira_name', color="#c8ffc8", kind=nvl)
+
+# Characters - Kasper
+define c_kasp_name = 'Kasper'
+define c_kasp = DynamicCharacter('c_kasp_name', color="#c8ffc8", kind=nvl)
+
+# Characters - Zoe
+define c_zoee_name = 'Zoë'
+define c_zoee = DynamicCharacter('c_zoee_name', color="#c8ffc8", kind=nvl)
+
+# Characters - Faye
+define c_faye_name = 'Faye'
+define c_faye = DynamicCharacter('c_faye_name', color="#c8ffc8", kind=nvl)
+
+# Characters - Jianyu
+define c_jian_name = 'Jianyu'
+define c_jian = DynamicCharacter('c_jian_name', color="#c8ffc8", kind=nvl)
+
 
 ####################### Characters - The Habitat
-define vikt_name = 'Viktor'
-
-define c_vikt = DynamicCharacter('vikt_name', color="#c8ffc8", kind=nvl)
+define c_vikt_name = 'Viktor'
+define c_vikt = DynamicCharacter('c_vikt_name', color="#c8ffc8", kind=nvl)
 
 #################################################
 
 # Images - Overlays
-image overlay black = "#000"
-image overlay black_mid = "#000A"
+image overlay ol_black = "#000"
+image overlay ol_black_mid = "#000A"
 
-# Images - Backgrounds
-image bg black = "#000"
-image bg gray = "#AAA"
-image bg red = "#E22"
-image bg cryopods = "cryopods"
-image bg flashback_railway = "landscape__16_by_sylar113-d71lpn3.jpg"
-image bg corridor = "cryopods" #TODO: temp
+# Images - Colors
+image bg bg_black = "#000"
+image bg bg_white = "#FFF"
+image bg bg_gray = "#AAA"
+image bg bg_red = "#E22"
+
+# Images - Flashbacks
+image bg bg_flashback_railway = "landscape__16_by_sylar113-d71lpn3.jpg"
+
+# Images - Ship
+image bg bg_ship_cryopods = "cryopods"
+image bg bg_ship_corridor_01 = "cryopods" #TODO: temp
+image bg bg_hq_entrance = "cryopods" #TODO: temp
+image bg bg_hq_center = "cryopods" #TODO: temp
 
 # Images - Special/Events
-image bg in_cryo = "in_cryo"
+image bg bg_event_cryo = "in_cryo"
 
 #################################################
 
@@ -74,12 +94,14 @@ init python:
 label start:
     window hide
     nvl show dissolve
-    scene bg black
+    scene bg bg_black
     
     # Causes the text window to stick around during transitions. Use "window hide" in a segment where that's not desirable, then "window show" again.
     window show
 
-    jump plot_intro
+    menu:
+        "Intro":
+            jump plot_intro
 
     return
 
@@ -89,23 +111,23 @@ label plot_intro:
     $ v_plot_intro_remember_mira = False
     $ v_plot_intro_guess_mira = ""
 
-    nvl clear
-    $ mira_name = 'Voice'
-    
+    $ c_mira_name = 'Voice'
+    $ c_kasp_name = 'Stranger'
+
     # TODO: Sfx: Bubbles with heavy reverb. Underwater.
     nvl clear
-    scene bg in_cryo with dissolve_slow
+    scene bg bg_event_cryo with dissolve_slow
     pause 1.5
     c_cent "Hey."
     
     # Full white with heavy blur. Hesitantly (back and forth) fades to a dark chamber full of cryopods.
     nvl clear
-    show bg black with dissolve_mid
+    show bg bg_black with dissolve_mid
     pause 1.0
     c_cent "Hey, wake up!"
     pause 0.7
     
-    show bg in_cryo with dissolve_mid
+    show bg bg_event_cryo with dissolve_mid
     pause 0.2
     nvl clear
     "In the distance, I hear repeated thuds."
@@ -113,22 +135,22 @@ label plot_intro:
     "But it's too distant."
     "Too cold."
 
-    show bg black with dissolve_mid
+    show bg bg_black with dissolve_mid
     nvl clear
     pause 0.3
-    show bg gray with dissolve_fast
-    show bg black with dissolve_fast
+    show bg bg_gray with dissolve_fast
+    show bg bg_black with dissolve_fast
     "A light flashes."
     "The banging sound is a lot closer."
     
     # Starts waking up. Mira blurry in front.
     nvl clear
-    show bg cryopods with dissolve_slow
-    show bg black with dissolve
-    show bg cryopods with dissolve
+    show bg bg_ship_cryopods with dissolve_slow
+    show bg bg_black with dissolve
+    show bg bg_ship_cryopods with dissolve
     pause 0.1
-    show bg black with dissolve_fast
-    show bg cryopods with dissolve_fast
+    show bg bg_black with dissolve_fast
+    show bg bg_ship_cryopods with dissolve_fast
     pause 1.5
     "Hot air is blowing in my face. I'm cold everywhere."
     "It's bright, much too bright."
@@ -139,7 +161,7 @@ label plot_intro:
     
     # Blur again and start to fade.
     nvl clear
-    show overlay black_mid with dissolve_mid
+    show overlay ol_black_mid with dissolve_mid
     pause 0.2
     c_mira "Fuck, I knew it was too late!"
     c_mira "Are you already dead?"
@@ -149,25 +171,25 @@ label plot_intro:
     
     # Screen jolts as Mira lifts up the player.
     nvl clear
-    show bg cryopods with pixellate_mid
+    show bg bg_ship_cryopods with pixellate_mid
     "I'm in someone's arms. Finally, it's warm."
     c_mira "Good thing you haven't eaten shit for months. This should be doable."
     c_mira "I hope."
-    show bg black with dissolve_mid
+    show bg bg_black with dissolve_mid
     
     # Mira carries the player and reveals she's the sister.
     nvl clear
     c_mira "Hey, don't go out on me!"
     "I'm shaken and something knocks against my head."
-    show bg cryopods with dissolve_mid
+    show bg bg_ship_cryopods with dissolve_mid
     c_mira "Don't you worry. Your big sis is gonna take care of you."
     "Oh. So that's who it is."
     "I suppose I have a sister."
     "My mind is still black. I can't recollect anything."
     "But it's good. Now it's all good."
     "My sister is here."
-    $ mira_name = 'Sister'
-    show bg black with dissolve_slow
+    $ c_mira_name = 'Sister'
+    show bg bg_black with dissolve_slow
     hide overlay
     
     # Title
@@ -179,7 +201,7 @@ label plot_intro:
     
     # Mira talks a little. Sees cryopod.
     nvl clear
-    show bg cryopods with dissolve
+    show bg bg_ship_cryopods with dissolve
     "I force my eyes open again. I don't know what's going on, but I'm starting to become anxious about it."
     "Why am I here?"
     "Why is my sister here?"
@@ -226,20 +248,20 @@ label plot_intro:
     nvl clear
     "I fold and unfold my hands a few times, each time with slightly more ease. The skin is pale and wrinkled, but with a shiny luster. It's like I'm a senior who's just been at spa."
     "Once I'm satisfied enough with my hand movements, I start straightening my legs..."
-    show bg red with dissolve_fast
-    show bg cryopods with dissolve_fast
+    show bg bg_red with dissolve_fast
+    show bg bg_ship_cryopods with dissolve_fast
     "Ah!"
     "My thighs are riveted, as though the blanket that covers them was really made of nails. An intense pain shoots up through my abdomen and I bend over."
-    show bg red with dissolve_fast
-    show overlay black_mid with None
-    show bg cryopods with dissolve_fast
+    show bg bg_red with dissolve_fast
+    show overlay ol_black_mid with None
+    show bg bg_ship_cryopods with dissolve_fast
     "Hahh... Hahh..."
     "Something is grabbing my stomach and twisting it apart."
     "Everything up to my shoulders is shaking."
     "I'm falling to pieces."
     "My vision blurs..."
     "...flickers..."
-    show bg black with pixellate_slow
+    show bg bg_black with pixellate_slow
     "...and goes out."
     hide overlay
     
@@ -251,17 +273,17 @@ label plot_intro:
     
     # Starts waking up. Realizes immobility.
     nvl clear
-    show bg red with dissolve_fast
-    show bg black with dissolve_fast
+    show bg bg_red with dissolve_fast
+    show bg bg_black with dissolve_fast
     "A sharp sting pierces my hip. I snap awake and reflexively push myself away. I have a headache from hell and I want to throw up, but my throat is too dry. Breathing heavily for air, I almost gag instead. Slowly, I move my hands along my body. My arms and torso seem to be mostly fine, but I have no tactility from my thighs down. I force my eyes open."
-    show bg cryopods with dissolve
+    show bg bg_ship_cryopods with dissolve
     "I'm lying with my back on the floor and my head still resting upright. Looking down, there's a dent in the floor panel just beside me, with a few sharp points straight at me. Aside from the momentary pain, I don't think it actually injured me."
     "Rather, I have a feeling this immobility isn't new."
 
     # Mira returns, wakes player. Worried.
     nvl clear
     c_mira "Sorry 'bout that, let's keep---"
-    show bg cryopods with pixellate_fast
+    show bg bg_ship_cryopods with pixellate_fast
     "As I'm looking up to see where my sister's coming from, she suddenly throws herself down."
     c_mira "What's going...?! How, how are you feeling?!"
     "She starts patting me all over and setting the overthrown blanket right again. Her eyes wander up and down me rapidly as she rambles."
@@ -272,9 +294,9 @@ label plot_intro:
     
     # Flashback to childhood railway.
     nvl clear
-    show bg black with dissolve_fast
-    show bg gray with dissolve
-    show bg flashback_railway with dissolve_mid
+    show bg bg_black with dissolve_fast
+    show bg bg_gray with dissolve
+    show bg bg_flashback_railway with dissolve_mid
     "The sun is warm. The grass tickles my bare skin. There's nothing in the soundscape but cicadas and grasshoppers. Even though there's only the one tree nearby, the immensity of the surrounding forest covers the whole clearing in a musky smell. I somehow know this forest is older than the railway, older than any city or man-made thing I've ever seen. It's what grounds me to this place, to this life."
     "I look up and down the tracks from where I'm sitting by the tree. There hasn't passed a train in a while, but I'm here nonetheless."
     "Maybe now."
@@ -282,7 +304,7 @@ label plot_intro:
     # Flashback cnt.
     nvl clear
     "From some way behind me, up the road, someone approaches me with familiarly steady steps. I sit up straighter as the pace quickens. When the gravel's crunch is replaced with the soft thuds and wisps of bending grass, I close my eyes."
-    show bg black with dissolve
+    show bg bg_black with dissolve
     "Thick arms take a tight hold on me and I'm lifted high, then burrowed into a birdnest of a hair, but I keep my eyes shut and just inhale deeply the reassuring diesel."
     "Maybe I won't see a train today either."
     "But it's good. It's all good."
@@ -293,7 +315,7 @@ label plot_intro:
     
     # Wakes up from flashback. First spoken words.
     nvl clear
-    show bg cryopods with pixellate_mid
+    show bg bg_ship_cryopods with pixellate_mid
     c_mira "Hey, you okay?! Shit!"
     "The grass is suddenly metal again. My sister is shaking me, but I think she's shaking just as much. Only her eyes are stable, pointed straight into mine."
     c_mira "Right... Are you... Are you okay? Can you speak?"
@@ -366,24 +388,24 @@ label plot_intro_p2:
         jump plot_intro_questions_name_pick
     
     label plot_intro_questions_name_pick:
-        $ prot_name = renpy.input(prompt="My name?", allow="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
-        if not prot_name:
+        $ c_prot_name = renpy.input(prompt="My name?", allow="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        if not c_prot_name:
             jump plot_intro_questions_name_pick
-        $ prot_name = prot_name.strip().title()
+        $ c_prot_name = c_prot_name.strip().title()
         
         nvl clear
-        if prot_name == "Mira":
+        if c_prot_name == "Mira":
             if not v_plot_intro_remember_mira:
                 $ v_plot_intro_remember_mira = True
                 c_mira "What?!"
                 "She stops so abruptly that I almost fall forward, but she catches both me and her breath quickly."
-                $ mira_name = 'Mira'
+                $ c_mira_name = 'Mira'
                 c_mira "Don't joke around, that's my name! Still... I'm very happy you remember."
                 c_mira "Come on, can I have a real answer now?"
                 nvl clear
             jump plot_intro_questions_name_pick
         
-        c_mira "It's [prot_name], huh?"
+        c_mira "It's [c_prot_name], huh?"
         "There's a playfulness in her eyes that I haven't noticed before."
         menu:
             "Yes":
@@ -452,24 +474,24 @@ label plot_intro_p4:
     
     # Exit the capsule room
     nvl clear
-    show bg corridor with dissolve_mid
+    show bg bg_ship_corridor_01 with dissolve_mid
     "We reach and enter through a doorway, at the other side of which we come into a corridor that stretches on both left and right. My sister's grip on me tightens as she peers up and down the corridor twice. I'm about to ask where we're going when she starts a brisker walk to the right, her head still half-turned in the other direction."
     "There's less light out here and the dimness makes me drowsy again. I close my eyes for just a moment..."
-    show bg black with dissolve_mid
+    show bg bg_black with dissolve_mid
     
     # TODO: Continued dream?
     
     # Wake up
     nvl clear
-    show bg corridor with dissolve_fast
+    show bg bg_ship_corridor_01 with dissolve_fast
     c_mira "Be quiet."
     "I open my eyes to see the wall of a corridor that looks the same as before, but I doubt it was only a moment ago. My sister's hand covers my mouth but I resist the instinct to gasp loudly. We're hunched in a small alcove together with some wiring and dust. In the distance - behind us? - there are sounds of hard, fast footsteps. As they grow louder, they also grow in number. Maybe ten, maybe more."
     "I peer up at my sister's face; it's sterner than I've seen it before and there's sweat that I don't think came from the rapid walk. She's staring at the alcove's wall in the direction of the footsteps, as if she could see right through it, inching her gaze closer and closer to the visible part of the corridor. Looking the rest of her down, she's holding a small gun in the hand that's not in my face. Both hands are shaking."
     
     # Runner passes by
     nvl clear
-    show bg white with dissolve_fast
-    show bg corridor with dissolve_fast
+    show bg bg_white with dissolve_fast
+    show bg bg_ship_corridor_01 with dissolve_fast
     "A man passes us by in a split second."
     "The speed of the runner and the surprise makes me lose all balance and I almost fall out of my sister's tight grip. But she won't let me move an inch. I glance upwards again. She's still looking back, ignoring the man who just passed us by. There are more footsteps coming; a lot more. Her hands grow shakier, as does her mouth. Only her narrow eyes are in control."
     
@@ -479,7 +501,7 @@ label plot_intro_p4:
     "I'm lifted ever so slightly as my sister's whole body tenses up. Her hand pushes harder onto my mouth and it's difficult to breathe. I try not to."
     "Thirteen?"
     "Fifteen?"
-    show bg black with dissolve_mid
+    show bg bg_black with dissolve_mid
     "I shut my eyes, and instantly feel like a fool for using baby-logic, but I know I must stay calm. I must not make a sound or a move, and counting them only makes me whisper it out loud. As soon as I do so, the footsteps immediately grow more faint; replaced more by their echo than anything real. Still, I keep my eyes shut until I feel my sister relax."
     "So I wait."
     
@@ -491,7 +513,7 @@ label plot_intro_p4:
     
     # Start moving again
     nvl clear
-    show bg corridor with dissolve_mid
+    show bg bg_ship_corridor_01 with dissolve_mid
     "Finally she stands up again. The sounds of running are gone, except for in my mind. Wordlessly, we start walking again. I want to ask her, but her hand is still covering my mouth; though gentler now."
         
     # Guess Mira's name
@@ -511,7 +533,7 @@ label plot_intro_p4:
         if not v_plot_intro_guess_mira:
             jump plot_intro_remember_mira_pick
         $ v_plot_intro_guess_mira = v_plot_intro_guess_mira.strip().title()
-        if v_plot_intro_guess_mira == prot_name:
+        if v_plot_intro_guess_mira == c_prot_name:
             jump plot_intro_remember_mira_pick
         if v_plot_intro_guess_mira == "Mira":
             jump plot_intro_questions_mira_correct
@@ -521,7 +543,7 @@ label plot_intro_p4:
     label plot_intro_questions_mira_correct:
         $ v_plot_intro_remember_mira = True
         c_mira "What?!"
-        $ mira_name = 'Mira'
+        $ c_mira_name = 'Mira'
         "She stops so abruptly that I almost fall forward, but she catches both me and her breath quickly."
         c_mira "I mean... I just... I really didn't think you'd remember..."
         "She looks away from me and sniffles twice, then clears her throat."
@@ -537,18 +559,91 @@ label plot_intro_p4:
         c_mira "I'm Mira."
         "Mira? I don't recognize the name... But I don't remember much else either..."
         c_mira "Well, no worries. I didn't expect you to. People usually don't remember much, if anything."
-        $ mira_name = 'Mira'
+        c_mira "I sure didn't know much..."
+        $ c_mira_name = 'Mira'
         jump plot_intro_p5
         
-    # Start moving forward again.
+    # Start moving forward again. Enters secret passageway.
 label plot_intro_p5:
     nvl clear
+    "Mira sighs and opens her mouth, then tenses up. She makes a 90 degree turn and we face another alcove. Are there people coming again?!"
+    "Throwing a quick eye in either direction, Mira steps into the alcove and lifts some of the heavy wiring apart, revealing a dark tunnel. As she bends down into it, shielding my body from the snapping wires, she gives me a wry smile."
+    c_mira "I hope you're not still afraid of the dark."
+    "With that, the tangle falls down behind us, leaving us in complete darkness."
+    show bg bg_black with pixellate_mid
     
+    # Walks through secret passageway.
     nvl clear
-    c_temp "Arrive at HQ"
+    "Based on the dull echo of Mira's footsteps and the heavy air, I'm guessing we're in a pretty tight area. More than that is anyone's guess."
+    "I've no idea how she manages, but Mira keeps a brisk pace. I can't even make her out, much less our surroundings. I become more aware of her breathing, now somewhat irregular. It's not just exertion from hauling me, I think she's been like this ever since those people passed us."
+    "I don't know for how long we walk like this. Every now and then, Mira stops for a short while; to gather her breath or her surroundings I don't know - though I also don't know how she'd be able to garner anything in this darkness. We never pause for long, however."
+    "In all likelihood, I fall in and out of conciousness. If so, I don't dream anything. I only hear the dull feet on metal beneath me and Mira's occasional, subdued gasps for air."
+    "I don't want her to go on if it hurts her, but I'm afraid to ask her to stop."
     
+    # Mira tells player to keep being woken up a secret.
     nvl clear
-    c_temp "Meet Kasper. Who are you? I'm Mira's sister/brother!"
+    "As I think so, we stop."
+    c_mira "Hey... We're almost home."
+    "She laughs coarsely."
+    c_mira "Well, not the home you're used to, of course. But it'll have to do for a while yet."
+    c_mira "When we arrive, or rather... Whenever, after this... Don't tell anyone about this."
+    "Mira takes a deep breath and starts lowering me, but stops just as I touch the cold metal floor."
+    c_mira "Oh right, you can't... Sorry. What I meant was, not just this tunnel or whatever. But more importantly, where I found you. Or how."
+    "She goes silent as she re-adjusts her hold on me again."
+    c_mira "I'm sorry. None of this must make any sense. But trust me when I say that I know the feeling."
+    c_mira "And make me trust you by never saying a word about any of this to anyone."
+    
+    # Get back into the light.
+    nvl clear
+    show bg bg_white with dissolve_fast
+    show bg bg_ship_corridor_01 with dissolve_mid
+    "From out of nowhere, something is shoved aside and we emerge back into the light. It's a corridor similar to the one we were in before, but also somehow different. The air is fresher, the steady light is easier on the eyes, and I feel almost rejuvenated."
+    c_mira "It's better that way."
+    
+    # Arrive at HQ door.
+    nvl clear
+    "Without further explanation, she sets off down the hallway. She's got a considerably calmer pace and only looks past her shoulder once as we make several turns, before stopping before a large, red door."
+    c_mira "Well, this is it. Finally."
+    "Mira gives the door a soft kick, listens for a second, then dishes out another three fiercer kicks. She's got the giddy eyes of a preschooler, but her brow is damp with sweat."
+    "After some twenty seconds of silence, heavy scraping can be heard from the door's opposite side, followed by something slamming heavily onto the floor. Without waiting any further, Mira gives the red door another kick and it flies open."
+    "When it's only half-open, the door stops with a thump as it hits something. Or someone."
+    
+    # Kasper gets hit by the door.
+    nvl clear
+    show bg bg_hq_entrance with dissolve_mid
+    c_kasp "Ow ow ow ow! What the hell, Mira?!"
+    c_mira "Oh come on, it's not like I hit you in the face. Well, maybe the door did."
+    "A man in his late twenties stumbles back from the door, holding one hand against his chest and the other on his chin. He's got an agitated look on his face as he glares at Mira. Meeting my eyes, he falls back another step and gasps."
+    c_kasp "Hey! Who's that?"
+    c_mira "\"That?\""
+    "Mira snorts and the man in front of us inches another step back."
+    
+    # Kasper asks player's identity.
+    nvl clear
+    c_kasp "I'm sorry. I just..."
+    "He turns to face me and folds his hands in front of him, then does a quick nod."
+    c_kasp "I'm sorry. I'm Kasper. I'm Mira's accomplice and bestest friend."
+    $ c_kasp_name = 'Kasper'
+    "Mira lifts her foot and aims at him, but he makes a quick sidestep."
+    c_kasp "What I meant to ask is \"who are you?\""
+    menu:
+        "I'm [c_prot_name], Mira's sister":
+            jump plot_intro_identity_sister
+        "I'm [c_prot_name], Mira's brother":
+            jump plot_intro_identity_brother
+
+    label plot_intro_identity_sister:
+        $ c_prot_gender = 'f'
+        nvl clear
+        jump plot_intro_p6
+
+    label plot_intro_identity_brother:
+        $ c_prot_gender = 'm'
+        nvl clear
+        jump plot_intro_p6
+
+label plot_intro_p6:
+    nvl clear
     
     nvl clear
     c_temp "Talk about disability"
