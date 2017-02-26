@@ -43,6 +43,7 @@ image bg gray = "#AAA"
 image bg red = "#E22"
 image bg cryopods = "cryopods"
 image bg flashback_railway = "landscape__16_by_sylar113-d71lpn3.jpg"
+image bg corridor = "cryopods" #TODO: temp
 
 # Images - Special/Events
 image bg in_cryo = "in_cryo"
@@ -50,8 +51,8 @@ image bg in_cryo = "in_cryo"
 #################################################
 
 # Transitions
-define dissolve_fast = Dissolve(0.18)
-define dissolve_mid = Dissolve(1.0)
+define dissolve_fast = Dissolve(0.1)
+define dissolve_mid = Dissolve(0.75)
 define dissolve_slow = Dissolve(2.0)
 define pixellate_fast = Pixellate(0.5, 6)
 define pixellate_mid = Pixellate(1.0, 5)
@@ -74,19 +75,24 @@ label start:
     window hide
     nvl show dissolve
     scene bg black
+    
+    # Causes the text window to stick around during transitions. Use "window hide" in a segment where that's not desirable, then "window show" again.
+    window show
 
     jump plot_intro
 
     return
 
 label plot_intro:
-    $ v_plot_intro_remember_mira = False
     $ v_plot_intro_mira_legs = False
+    $ v_plot_intro_guess_year = 0
+    $ v_plot_intro_remember_mira = False
+    $ v_plot_intro_guess_mira = ""
 
     nvl clear
     $ mira_name = 'Voice'
     
-    # TODO Sfx: Bubbles with heavy reverb. Underwater.
+    # TODO: Sfx: Bubbles with heavy reverb. Underwater.
     nvl clear
     scene bg in_cryo with dissolve_slow
     pause 1.5
@@ -179,12 +185,12 @@ label plot_intro:
     "Why is my sister here?"
     "Where is {i}here{/i}?"
     c_mira "I hope I'm not holding you too crummily."
-    c_mira "It's not easy as when we were kids, you know."
-    "I'm scuffed up a bit, so that my head is leaning over her shoulder. Behind us is some kind of capsule, open, with a bed-like bottom and glass cover. There's flashing text on the glass cover, but I can't read what it says."
+    c_mira "It's not as easy as when we were kids, you know."
+    "I'm scuffed up a bit, so that my head is leaning over her shoulder. Behind us is some kind of capsule, open, with a bed-like bottom and glass cover. There's flashing text on the cover, but I can't read what it says."
     
     # Mira talks some more. Starts walking.
     nvl clear
-    "We're walking slowly across a floor of metal panels. On both our sides are rows of capsules like the one behind us. Some are open, but there's no flashing text on their glass covers. Others are still closed, with people in them. I try to see if anyone's breathing, I stretch my head closer to one as we pass it, but I don't see any movement at all."
+    "We're walking slowly across a floor of metal panels. On both our sides are rows of capsules like the one behind us. Some are open, but there's no flashing text on them. Others are still closed, with people in them. I try to see if anyone's breathing, I stretch my head closer to one as we pass it, but I don't see any movement at all."
     c_mira "Hey, hey! Don't move now."
     "My sister stops and re-adjusts me. As she takes a first step again, she suddenly halts and turns to the capsule I tried to peer into."
     c_mira "You didn't...?"
@@ -205,7 +211,7 @@ label plot_intro:
     # Starts walking again. Observes surroundings. Listens.
     nvl clear
     "We start walking again, faster this time. My eyes slowly begin to adjust to the hazy, blue light that seems to be emitted from strips along the battens against both ceiling and floor. I look into all the capsules we pass, but no-one is moving. No-one is awake."
-    "There are men and women of all ages. Even children. Most seem to be either European or Asian, but of course it's hard to tell. Mostly Chinese, but a lot of what I think are Indians, Japanese and south-east Asians too."
+    # "There are men and women of all ages. Even children. Most seem to be either European or Asian, but of course it's hard to tell. Mostly Chinese, but a lot of what I think are Indians, Japanese and south-east Asians too."
     "There's a deep rumble coming from somewhere far away, maybe below us. It comes and goes in waves; at times inaudible, then crashing towards us so strongly that it feels like it's just underneath our feet. It sounds like a large dryer, only instead of clothes it's filled with metal and rocks. After a few seconds when I think it's going to show up running head-first towards us, the noise slowly fades again. Less than a minute later, it returns."
     "Was that what I heard before?"
     
@@ -213,7 +219,8 @@ label plot_intro:
     nvl clear
     c_mira "Wait..."
     "She comes to a halt and quickly puts me down on the floor, looking to the side. The cold metal finds the gaps in my blanket, chilling my bum and legs and sending a tinge through my whole body and I gasp. But my sister doesn't notice. Instead, she walks off and vanishes into the rows of capsules without looking back."
-    "I hear only a few steps after I lose sight of her, then the room descends into silence. I try to move my arms for the first time and, though they ache, I manage to grip whatever I'm leaning against and push myself up a little higher. It's marginally more comfortable."
+    "I hear only a few steps after I lose sight of her, then the room descends into silence. I try to move my arms for the first time and, though they ache, I manage to grip whatever I'm leaning against and push myself up a little higher."
+    "It's marginally more comfortable."
     
     # Starts to regain sense/body control.
     nvl clear
@@ -227,8 +234,13 @@ label plot_intro:
     show overlay black_mid with None
     show bg cryopods with dissolve_fast
     "Hahh... Hahh..."
-    "Something is grabbing my stomach and twisting it apart. Everything up to my shoulders is shaking. I'm falling to pieces. My vision blurs and flickers."
+    "Something is grabbing my stomach and twisting it apart."
+    "Everything up to my shoulders is shaking."
+    "I'm falling to pieces."
+    "My vision blurs..."
+    "...flickers..."
     show bg black with pixellate_slow
+    "...and goes out."
     hide overlay
     
     # Is out cold.
@@ -256,7 +268,7 @@ label plot_intro:
     c_mira "What, what happened? Are you alright? Did you... I mean, is this alright? Where does it hurt? Does it hurt? It hurts, right? Oh fuck fuck fuck fuck fuck fuck..."
     "I give her a bleak smile and am about to pull myself up when I remember how it felt just now."
     c_mira "Oh fuck... I'm so {i}so{/i} sorry! I never should've left you like that! Shit!"
-    "She hugs me closely, absorbing me in a smell of diesel, deep wood, and fat hair."
+    "She hugs me closely, absorbing me in a smell of diesel, deep wood, and fat hair. I inhale deeply and..."
     
     # Flashback to childhood railway.
     nvl clear
@@ -273,6 +285,7 @@ label plot_intro:
     show bg black with dissolve
     "Thick arms take a tight hold on me and I'm lifted high, then burrowed into a birdnest of a hair, but I keep my eyes shut and just inhale deeply the reassuring diesel."
     "Maybe I won't see a train today either."
+    "But it's good. It's all good."
 
     nvl clear
     c_cent "Hey."
@@ -311,9 +324,9 @@ label plot_intro:
 
     label plot_intro_first_talk_railway:
     nvl clear
-    c_mira "Ah, mm. That's, yeah, okay. That's nothing to worry about."
+    c_mira "Ah, mm. That's, yeah, okay. I'm, I'm just happy you're okay."
     "She smiles and moves back a little bit. The wrinkles in her face fade away and she brushes a hand through her short but thick hair."
-    c_mira "We can talk about it later."
+    c_mira "I wouldn't worry about that, if I were you. But we'll talk about it later, okay?"
     jump plot_intro_p2
     
     # Starts walking again.
@@ -353,7 +366,7 @@ label plot_intro_p2:
         jump plot_intro_questions_name_pick
     
     label plot_intro_questions_name_pick:
-        $ prot_name = renpy.input(prompt="My name?", allow="abcdefghijklmnopqrstuvwxyz")
+        $ prot_name = renpy.input(prompt="My name?", allow="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
         if not prot_name:
             jump plot_intro_questions_name_pick
         $ prot_name = prot_name.strip().title()
@@ -364,6 +377,7 @@ label plot_intro_p2:
                 $ v_plot_intro_remember_mira = True
                 c_mira "What?!"
                 "She stops so abruptly that I almost fall forward, but she catches both me and her breath quickly."
+                $ mira_name = 'Mira'
                 c_mira "Don't joke around, that's my name! Still... I'm very happy you remember."
                 c_mira "Come on, can I have a real answer now?"
                 nvl clear
@@ -397,10 +411,9 @@ label plot_intro_p3:
     label plot_intro_questions_year_pick:
         python:
             try:
-                v_plot_intro_guess_year = int(renpy.input(prompt="The current year?", allow="0123456789",length=4))
+                v_plot_intro_guess_year = int(renpy.input(prompt="The current year?", allow="0123456789",length=5))
             except ValueError:
                 v_plot_intro_guess_year = 0
-                #jump plot_intro_questions_year_pick
         if not v_plot_intro_guess_year:
             jump plot_intro_questions_year_pick
         
@@ -431,44 +444,129 @@ label plot_intro_p3:
     
     # Explain that everyone's been frozen down. Not knowing the year.
 label plot_intro_p4:
-    c_mira "See, I don't really know what year it is either. Maybe it really is [v_plot_intro_guess_year], I dunno."
+    c_mira "See, I don't really know what year it is either."
+    if v_plot_intro_guess_year:
+        c_mira "Maybe it really is [v_plot_intro_guess_year], I dunno."
     c_mira "We've all been frozen down for who knows how long, and nothing here's got any kind of time on it. Can't fucking believe it..."
-    "Her lips pinch together and we walk in silence for a moment."
-    # TODO
+    "Her lips pinch together and stays so for some time as we walk on."
     
-    # Guess Mira's name
-    # TODO
+    # Exit the capsule room
     nvl clear
-    if v_plot_intro_remember_mira:
-        jump plot_intro_questions_mira_already
+    show bg corridor with dissolve_mid
+    "We reach and enter through a doorway, at the other side of which we come into a corridor that stretches on both left and right. My sister's grip on me tightens as she peers up and down the corridor twice. I'm about to ask where we're going when she starts a brisker walk to the right, her head still half-turned in the other direction."
+    "There's less light out here and the dimness makes me drowsy again. I close my eyes for just a moment..."
+    show bg black with dissolve_mid
     
-    label v_plot_intro_remember_mira_pick:
-        $ v_plot_intro_guess_mira = renpy.input(prompt="My sister's name?", allow="abcdefghijklmnopqrstuvwxyz")
+    # TODO: Continued dream?
+    
+    # Wake up
+    nvl clear
+    show bg corridor with dissolve_fast
+    c_mira "Be quiet."
+    "I open my eyes to see the wall of a corridor that looks the same as before, but I doubt it was only a moment ago. My sister's hand covers my mouth but I resist the instinct to gasp loudly. We're hunched in a small alcove together with some wiring and dust. In the distance - behind us? - there are sounds of hard, fast footsteps. As they grow louder, they also grow in number. Maybe ten, maybe more."
+    "I peer up at my sister's face; it's sterner than I've seen it before and there's sweat that I don't think came from the rapid walk. She's staring at the alcove's wall in the direction of the footsteps, as if she could see right through it, inching her gaze closer and closer to the visible part of the corridor. Looking the rest of her down, she's holding a small gun in the hand that's not in my face. Both hands are shaking."
+    
+    # Runner passes by
+    nvl clear
+    show bg white with dissolve_fast
+    show bg corridor with dissolve_fast
+    "A man passes us by in a split second."
+    "The speed of the runner and the surprise makes me lose all balance and I almost fall out of my sister's tight grip. But she won't let me move an inch. I glance upwards again. She's still looking back, ignoring the man who just passed us by. There are more footsteps coming; a lot more. Her hands grow shakier, as does her mouth. Only her narrow eyes are in control."
+    
+    # Raiders pass
+    nvl clear
+    "Several people pass us in rush. One, two, four, five, seven or eight, nine, twelve?"
+    "I'm lifted ever so slightly as my sister's whole body tenses up. Her hand pushes harder onto my mouth and it's difficult to breathe. I try not to."
+    "Thirteen?"
+    "Fifteen?"
+    show bg black with dissolve_mid
+    "I shut my eyes, and instantly feel like a fool for using baby-logic, but I know I must stay calm. I must not make a sound or a move, and counting them only makes me whisper it out loud. As soon as I do so, the footsteps immediately grow more faint; replaced more by their echo than anything real. Still, I keep my eyes shut until I feel my sister relax."
+    "So I wait."
+    
+    # Wait for Mira to relax
+    nvl clear
+    "And I wait."
+    nvl clear
+    "And wait."
+    
+    # Start moving again
+    nvl clear
+    show bg corridor with dissolve_mid
+    "Finally she stands up again. The sounds of running are gone, except for in my mind. Wordlessly, we start walking again. I want to ask her, but her hand is still covering my mouth; though gentler now."
+        
+    # Guess Mira's name
+    if v_plot_intro_remember_mira:
+        jump plot_intro_p5
+    nvl clear
+    "It takes several minutes before she casually lets go of my mouth, almost an after-thought, as she gives me a quick glance."
+    c_mira "There's one more thing I wanted to ask you before we arrive."
+    c_mira "It's not really a fair question, but just indulge me, okay?"
+    "She gives me a quick smile, before her eyes dart back to the road ahead. So far she hasn't let her eyes leave the corridor in front of us for longer than a second, ever since those people passed us. I'd thought she would be stopping to listen every now and then, too, but her tempo has been constant, even as she speaks to me."
+    c_mira "So the thing is... Do you remember my name?"
+    jump plot_intro_remember_mira_pick
+    
+    label plot_intro_remember_mira_pick:
+        nvl clear
+        $ v_plot_intro_guess_mira = renpy.input(prompt="My sister's name?", allow="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
         if not v_plot_intro_guess_mira:
-            jump v_plot_intro_remember_mira_pick
+            jump plot_intro_remember_mira_pick
         $ v_plot_intro_guess_mira = v_plot_intro_guess_mira.strip().title()
+        if v_plot_intro_guess_mira == prot_name:
+            jump plot_intro_remember_mira_pick
         if v_plot_intro_guess_mira == "Mira":
-            jump plot_intro_questions_mira_yes
+            jump plot_intro_questions_mira_correct
         else:
-            jump plot_intro_questions_mira_no
+            jump plot_intro_questions_mira_other
 
-    label plot_intro_questions_mira_yes:
-        # TODO
+    label plot_intro_questions_mira_correct:
+        $ v_plot_intro_remember_mira = True
+        c_mira "What?!"
+        $ mira_name = 'Mira'
+        "She stops so abruptly that I almost fall forward, but she catches both me and her breath quickly."
+        c_mira "I mean... I just... I really didn't think you'd remember..."
+        "She looks away from me and sniffles twice, then clears her throat."
+        c_mira "It's like, you don't remember anything and you hadn't said my name yet and I thought you would if so and I just didn't think you'd, well... I'm, ah..."
+        "She exhales loudly. After a few seconds of silence, she faces me again with a strained smile."
+        c_mira "I'm just happy. That you remember me... Not everyone does."
         jump plot_intro_p5
     
-    label plot_intro_questions_mira_no:
-        # TODO
+    label plot_intro_questions_mira_other:
+        c_mira "[v_plot_intro_guess_mira]?"
+        "She smiles, still looking ahead, and shakes her head slightly."
+        c_mira "That's a nice name, but it's not mine."
+        c_mira "I'm Mira."
+        "Mira? I don't recognize the name... But I don't remember much else either..."
+        c_mira "Well, no worries. I didn't expect you to. People usually don't remember much, if anything."
+        $ mira_name = 'Mira'
         jump plot_intro_p5
         
-    label plot_intro_questions_mira_already:
-        c_mira "So... The last one was gonna be about me, but I'm gonna let you slip on that. You already remembered my name, you know."
-        "She blinks a couple times, then looks away and coughs once."
-        jump plot_intro_p5
-
-# Start moving forward again.
+    # Start moving forward again.
 label plot_intro_p5:
     nvl clear
     
+    nvl clear
+    c_temp "Arrive at HQ"
+    
+    nvl clear
+    c_temp "Meet Kasper. Who are you? I'm Mira's sister/brother!"
+    
+    nvl clear
+    c_temp "Talk about disability"
+    
+    nvl clear
+    c_temp "Talk about walkie-talkies."
+    
+    nvl clear
+    c_temp "Sleep"
+    
+    nvl clear
+    c_temp "First morning. Talk about assignment mechanic."
+    
+    nvl clear
+    c_temp "What's needed ASAP?"
+    
+    nvl clear
+    c_temp "Assign duties to Mira and Kasper."
     
     
     
