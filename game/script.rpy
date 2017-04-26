@@ -18,10 +18,13 @@ define c_temp = Character('*TEMP*', color="#c8ffc8", kind=nvl)
 define c_prot_name = 'Me'
 define c_prot = DynamicCharacter('c_prot_name', color="#c8ffc8", kind=nvl)
 define c_prot_gender = 'f'
+define c_prot_sibling = 'sister'
 
 # Characters - Mira
 define c_mira_name = 'Mira'
 define c_mira = DynamicCharacter('c_mira_name', color="#c8ffc8", kind=nvl)
+define v_mira_knows_legs = False
+define v_mira_talk_legs = False
 
 # Characters - Kasper
 define c_kasp_name = 'Kasper'
@@ -79,8 +82,30 @@ define pixellate_mid = Pixellate(1.0, 5)
 define pixellate_slow = Pixellate(2.0, 5)
 
 #################################################
+    
+label mira_talk:
+    menu:
+        "Do you know what's happened with my legs?" if v_mira_talk_legs == False and v_mira_knows_legs == True:
+            $ v_mira_talk_legs = True
+            jump mira_talk_legs
+        "I'm good for tonight.":
+            return
+
+label mira_talk_legs:
+    nvl clear
+    c_temp "Talk about legs"
+    return
 
 init python:
+
+    # Sets all gender related variables.
+    def prot_gender_set(in_gender):
+        renpy.store.c_prot_gender = [in_gender]
+        if c_prot_gender == 'f':
+            renpy.store.c_prot_sibling = 'sister'
+        else:
+            renpy.store.c_prot_sibling = 'brother'
+        return
 
     menu = nvl_menu
     config.empty_window = nvl_show_core
@@ -106,7 +131,6 @@ label start:
     return
 
 label plot_intro:
-    $ v_plot_intro_mira_legs = False
     $ v_plot_intro_guess_year = 0
     $ v_plot_intro_remember_mira = False
     $ v_plot_intro_guess_mira = ""
@@ -281,6 +305,7 @@ label plot_intro:
     "Rather, I have a feeling this immobility isn't new."
 
     # Mira returns, wakes player. Worried.
+    #TODO: Add more details to Mira's appearance, here or earlier.
     nvl clear
     c_mira "Sorry 'bout that, let's keep---"
     show bg bg_ship_cryopods with pixellate_fast
@@ -336,7 +361,7 @@ label plot_intro:
     
     label plot_intro_first_talk_legs:
     nvl clear
-    $ v_plot_intro_mira_legs = True
+    $ v_mira_knows_legs = True
     c_mira "Oh. Huh. Hmm..."
     "She frowns and squeezes my legs lightly. At least it looks that way, I can't feel a thing in them."
     c_mira "Legs are a no-go, huh? Fuck..."
@@ -421,8 +446,11 @@ label plot_intro_p3:
     "My sister looks around and her grip gets tighter."
     c_mira "I'd like to pick up the pace, but there's no point in overdoing it now in case something comes up later. So hopefully we can keep chattting."
     c_mira "It's been a while, after all."
-    "She gives me a glance and half a smile, but it only lasts a second before her eyes become stern again."
-    c_mira "Now then. Do you know what year it is?"
+    "She gives me a glance and half a smile, then sighs slightly."
+    c_mira "Man, I could really use a smoke right now..."
+    c_mira "But don't worry, I'll have to hold out a bit longer. It's not worth the risk of dropping you."
+    "She gives a hushed laugh, but it only lasts a second before her eyes become stern again."
+    c_mira "Now then. Time for another go at the protocol. Do you know what year it is?"
     menu:
         "Maybe...":
             jump plot_intro_questions_year_pick
@@ -543,9 +571,9 @@ label plot_intro_p4:
     label plot_intro_questions_mira_correct:
         $ v_plot_intro_remember_mira = True
         c_mira "What?!"
-        $ c_mira_name = 'Mira'
         "She stops so abruptly that I almost fall forward, but she catches both me and her breath quickly."
         c_mira "I mean... I just... I really didn't think you'd remember..."
+        $ c_mira_name = 'Mira'
         "She looks away from me and sniffles twice, then clears her throat."
         c_mira "It's like, you don't remember anything and you hadn't said my name yet and I thought you would if so and I just didn't think you'd, well... I'm, ah..."
         "She exhales loudly. After a few seconds of silence, she faces me again with a strained smile."
@@ -557,10 +585,10 @@ label plot_intro_p4:
         "She smiles, still looking ahead, and shakes her head slightly."
         c_mira "That's a nice name, but it's not mine."
         c_mira "I'm Mira."
+        $ c_mira_name = 'Mira'
         "Mira? I don't recognize the name... But I don't remember much else either..."
         c_mira "Well, no worries. I didn't expect you to. People usually don't remember much, if anything."
         c_mira "I sure didn't know much..."
-        $ c_mira_name = 'Mira'
         jump plot_intro_p5
         
     # Start moving forward again. Enters secret passageway.
@@ -604,52 +632,102 @@ label plot_intro_p5:
     nvl clear
     "Without further explanation, she sets off down the hallway. She's got a considerably calmer pace and only looks past her shoulder once as we make several turns, before stopping before a large, red door."
     c_mira "Well, this is it. Finally."
-    "Mira gives the door a soft kick, listens for a second, then dishes out another three fiercer kicks. She's got the giddy eyes of a preschooler, but her brow is damp with sweat."
+    "Mira gives the door a soft kick, listens for a second, then dishes out a set of three fiercer kicks. She's got the giddy eyes of a preschooler, but her brow is damp with sweat."
     "After some twenty seconds of silence, heavy scraping can be heard from the door's opposite side, followed by something slamming heavily onto the floor. Without waiting any further, Mira gives the red door another kick and it flies open."
-    "When it's only half-open, the door stops with a thump as it hits something. Or someone."
     
-    # Kasper gets hit by the door.
+    # Kasper intro.
+    #TODO: Add more details to Kasper's appearance/manners.
     nvl clear
     show bg bg_hq_entrance with dissolve_mid
-    c_kasp "Ow ow ow ow! What the hell, Mira?!"
-    c_mira "Oh come on, it's not like I hit you in the face. Well, maybe the door did."
-    "A man in his late twenties stumbles back from the door, holding one hand against his chest and the other on his chin. He's got an agitated look on his face as he glares at Mira. Meeting my eyes, he falls back another step and gasps."
-    c_kasp "Hey! Who's that?"
-    c_mira "\"That?\""
-    "Mira snorts and the man in front of us inches another step back."
+    "Through the door is a large chamber filled with electrical appliances and monitors, albeit mostly showing a black screen. The ceiling is supposedly high, but wires are hanging all over it and stretching down far enough to occasionally touch the floor. There are boxes and loose scrap lying all over the room, with only a narrow path snaking through it. At the head of the path, just at the other side of the door, stands a blonde man in his late twenties, scratching something that few would call a beard."
+    c_kasp "Welcome back. Oh, we got a... a guest?"
+    "Mira snorts and heads into the room, prompting the man to back into it as well."
+    
+    # Kasper intro cont.
+    nvl clear
+    c_mira "This is my right-hand man, Kasper."
+    $ c_kasp_name = 'Kasper'
+    c_kasp "I'm left-handed, though."
+    c_mira "...Anyway. Kasper, this is [c_prot_name]. Do get along, will you?"
+    "She coughs as she puts me down on a chair that probably only has three legs."
+    c_mira "Hey, we got anything to drink? I'm beat."
+    c_kasp "Just the water... And it's almost out again."
+    "Mira only gives a small wave in response as she heads off to our left."
+    c_kasp "I can go over to the Hab tomorrow, if you wanna. I got nothing planned."
+    c_mira "Mmyeah... We'll talk about it in the morning."
+    "Without stopping, Mira responds, then vanishes behind the scraps and into some other room."
     
     # Kasper asks player's identity.
     nvl clear
-    c_kasp "I'm sorry. I just..."
-    "He turns to face me and folds his hands in front of him, then does a quick nod."
-    c_kasp "I'm sorry. I'm Kasper. I'm Mira's accomplice and bestest friend."
-    $ c_kasp_name = 'Kasper'
-    "Mira lifts her foot and aims at him, but he makes a quick sidestep."
-    c_kasp "What I meant to ask is \"who are you?\""
+    "A moment passes in mostly silence, interrupted only sporadically by indistinct clamoring from the direction Mira went. It could be something involving pots or kettles, but I have a hard time imagining how much one would have to move about a pot to cause that much noise. As I peer after her, I try prodding my legs up and down, but at least that doesn't seem to hurt. Just using them does. Hopefully I'm better tomorrow."
+    c_kasp "So..."
+    "He turns to face me and folds his hands in front of him, then distances himself with a few steps. He then takes a quick look in Mira's direction, before coming closer again. His hands fold and unfold a few times before he speaks again."
+    c_kasp "So how do you know Mira? I mean, if you don't mind me asking..."
     menu:
         "I'm [c_prot_name], Mira's sister":
-            jump plot_intro_identity_sister
+            $ prot_gender_set('f')
         "I'm [c_prot_name], Mira's brother":
-            jump plot_intro_identity_brother
+            $ prot_gender_set('m')
+    jump plot_intro_p6
 
-    label plot_intro_identity_sister:
-        $ c_prot_gender = 'f'
-        nvl clear
-        jump plot_intro_p6
-
-    label plot_intro_identity_brother:
-        $ c_prot_gender = 'm'
-        nvl clear
-        jump plot_intro_p6
-
+    # Kasper is surprised that Mira is the player's sister.
 label plot_intro_p6:
     nvl clear
+    c_kasp "Huh?"
+    "Kasper's eyes widen."
+    c_kasp "Mira's your sister?"
+    c_kasp "Well, I, ehh..."
+    "He scratches his chin and glances twice in the direction Mira went. It's quieted down now, with only the subdued whirr of fans and crackling of electricity somewhere in the room."
+    c_kasp "You also want something to drink? Maybe? We, uh, we got water. Well, kind of. It's not particularly clean or anything. But it's drinkable. I think. I mean, it is. I'll go. Okay?"
+    "Only waiting for the smallest of nods from me, he shuffles away through on of the snaking paths."
+
+    # Look about the room.
+    #TODO: Add more character-building details to the room.
+    nvl clear
+    "I carefully lean back on the unstable chair while I wait for the two of them to return. It's not particularly comfortable, but the moment of stillness is welcome nonetheless. Looking more thoroughly about the room, it's clear that it's in a dire need of restoration. There are sparking wires hanging all across the ceiling and there's scrap of all kinds lying about the floor and on top of pretty much any kind of furniture. In fact, I think the questionable chair I'm occupying is the only place where I even could be seated."
+    "At the far end of the room there's a computer with something akin to a wall of monitors, though all that I can see are turned off. Instead, the room's blurry, almost nauseous, light is coming from the same kind of sources as I encountered out in the hallways; strip lights attached to the battens along both floor and ceiling. Maybe half the strips are broken, while the rest have an uncomfortable occasional flickering going on, neither of which sells me terribly on the idea of living here. Then again, I'd much rather be here than with the people running and gunning each other in the hallways; not to mention being back in that cryopod."
+	
+	# Cont'd room description.
+	nvl clear
+	"At the room's other end, near the now-shut door we came in from, there's a half-open aluminium cupboard which holds a patch-covered denim jacket. Leaning against the cupboard is an acoustic guitar made of some dark wood, though even from this distance it looks too worn down to be of any further use. I can't recall if I ever played the guitar... I must have at least tried it a few times, or did I actually learn it? My mind's still so hazy..."
+	"Resting my head against my arms - was it always this heavy? - my eyes invariably roll over the scrap below me. There's dozens of cans marked with a bright, green H strewn around, though there's also a nearby pile; or what may have once been a pile before it turned into more of a descending slope. Stuck deep into one of them is a bundle of cigarette butts, long since mostly dissolved in the can's residue."
+    
+    # Mira and Kasper returns with water.
+    nvl clear
+    "Eventually Mira returns, with Kasper in tow and carrying a tray with three glasses and a canteen."
+    c_mira "Hey there [c_prot_name], sorry that Kasper ran out on you."
+    if c_prot_gender == 'f':
+        c_mira "He gets so shy around ladies."
+        "She makes a light cackle, but Kasper just looks down at the tray in his hands."
+    "Mira snathces two of the glasses and pours them full of water, then hands me one of them and gulps the other in one go."
+    menu:
+        "Down it":
+            "I follow her example and chug it all down. It's got a strong tone of chlorine to it, but at least it subdues the worst of a thirst I hadn't noticed that I had."
+            c_kasp "Hey, you two may wanna slow it down a bit. This is the last we've got, remember?"
+        "Sip it":
+            "I take a catious sip. Its got a strong tone of chlorine to it, and I'm instantly made aware that I've got an immense thirst."
+            c_kasp "I know it doesn't taste like home, but I'm afraid this is the last we've got."
+    "Kasper takes a protective hold of the canteen, but Mira just shrugs and hands him her glass back."
+    
+    # Start talk about walkie-talkies. Mira brings out batteries.
+    nvl clear
+    c_mira "We'll get more tomorrow, I told you."
+    c_kasp "So how will we---"
+    "Kasper goes silent when Mira holds up her hand. She opens her mouth slowly and licks her lips, then is silent for a few seconds. Just as I begin to think she didn't actually have something she wanted to say, she turns to me."
+    c_mira "That reminds me. We should talk about the walkie-talkies."
+    c_kasp "Huh? But you know they don't work, right? If they had, you could've taken one with you today. Heck, we could've used them tons of times!"
+    c_mira "Oh, hush you. They've been working all along. We've just been out of juice."
+    "Mira digs in her pocket and brings up a couple batteries, each twice the size of a thumb. She tosses them to Kasper who instinctively tries to capture them on the tray he's still holding, only to end up juggling both it, the canteen, and the glass in his other hand."
+    c_mira "That's what I went out to get today. Well, that and [c_prot_name] of course."
+
+    # Walkie-talkies cont.
+    c_mira "See, we've got a set of walkie-talkies that we found way back. Or something like walkie-talkies, anyway."
     
     nvl clear
-    c_temp "Talk about disability"
-    
-    nvl clear
-    c_temp "Talk about walkie-talkies."
+    c_temp "Ask Mira 1 question. Use $ renpy.call(label)"
+    c_mira "Okay, so I'm really longing for some shuteye, but I figure you got a lot on your mind, am I right? How 'bout you pick one thing you're wanna ask, and we'll do the rest later, huh?"
+    $ renpy.call("mira_talk")
+    c_temp "That's all, folks!"
     
     nvl clear
     c_temp "Sleep"
@@ -658,11 +736,14 @@ label plot_intro_p6:
     c_temp "First morning. Talk about assignment mechanic."
     
     nvl clear
+    c_temp "Talk about disability"
+    $ v_mira_knows_legs = True
+    
+    nvl clear
     c_temp "What's needed ASAP?"
     
     nvl clear
     c_temp "Assign duties to Mira and Kasper."
-    
     
     
     
